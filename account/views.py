@@ -6,12 +6,28 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-
+from django.utils.text import slugify
 #from orders.views import user_orders
 
-from .forms import Registration, UserEditForm
+from .forms import Registration, UserEditForm, ProductForm
 from .models import UserBase
 from .tokens import account_activation_token
+
+@login_required
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+
+        if forms.is_valid():
+            product = form.save(commit=False)
+            product.user = request.user
+            product.slug = slugify(product.title)
+            product.save()
+            return redirect('home')
+    else:
+        form = ProductForm()
+    return render(request, 'account/user/add_product.html', {'form': form})
+
 
 
 @login_required
