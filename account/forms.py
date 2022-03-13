@@ -3,6 +3,12 @@ from django.contrib.auth.forms import (AuthenticationForm, PasswordResetForm,
                                        SetPasswordForm)
 
 from .models import UserBase
+from market.models import Product
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['category', 'image', 'title', 'description', 'price']
 
 
 class UserLoginForm(AuthenticationForm):
